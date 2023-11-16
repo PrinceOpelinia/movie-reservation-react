@@ -1,5 +1,6 @@
 import { useState } from "react";
 import movieData from "./movieData";
+import SeatReservationSystem from "./SeatReservationSystem";
 
 const MovieChoice = ({ selectedDate }) => {
   const findDate = movieData.find(
@@ -9,9 +10,13 @@ const MovieChoice = ({ selectedDate }) => {
   return (
     <div>
       {findDate ? (
+        <div> 
         <p>
           Found Movie: {findDate.title} {findDate.movieName}
+          
         </p>
+        <SeatReservationSystem findDate={findDate} />
+        </div>
       ) : (
         <p>Movie not found</p>
       )}

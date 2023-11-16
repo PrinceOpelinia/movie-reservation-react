@@ -7,7 +7,7 @@ const Header = () => {
     return (
 
         <div className="header">
-          My Header
+         <p>Movie Seat Reservation System</p> 
         </div>
  
     );

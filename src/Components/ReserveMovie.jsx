@@ -11,11 +11,18 @@ const ReserveMovie = () => {
   const handleStartMovieChoice = () => {
     // Do something with the selectedDate, e.g., pass it to a parent component or perform further processing
     setStartMovieChoice(true);
-    console.log(selectedDate);
+ 
   };
+
+  const handleGoToReserveMovie = () => {
+    // Do something with the selectedDate, e.g., pass it to a parent component or perform further processing
+    setStartMovieChoice(false);
+  };
+
 
   return (
     <div>
+      
       {!startMovieChoice && (
         <form>
           <label>
@@ -31,7 +38,9 @@ const ReserveMovie = () => {
           </button>
         </form>
       )}
-
+  <button className= "go-back-btn" type="submit" onClick={handleGoToReserveMovie}>
+    Go Back
+  </button>
       {startMovieChoice && <MovieChoice selectedDate={selectedDate} />}
     </div>
   );

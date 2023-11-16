@@ -10,3 +10,11 @@
  
   width: auto;
 }
+
+.go-back-btn{
+  appearance: button;
+  background-color: #1899D6;
+  height: 25px;
+  width: 100px;
+  
+}

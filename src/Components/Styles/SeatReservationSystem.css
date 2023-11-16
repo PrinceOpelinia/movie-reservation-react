@@ -1,0 +1,29 @@
+.row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .seat {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  
+  .available {
+    background-color: #b8e994; /* Light green for available seats */
+  }
+  
+  .unavailable {
+    background-color: #dcdde1; /* Light gray for unavailable seats */
+  }
+  
+  .selected {
+    background-color: #ff7675; /* Light red for selected seats */
+  }
+  
