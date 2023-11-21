@@ -1,11 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import movieData from "./movieData";
+import TicketList from "./TicketList";
 
-const SeatReservationSystem = ({findDate}) => {
+const SeatReservationSystem = ({ selectedMovie }) => {
+  // Function to generate a random number between min (inclusive) and max (inclusive)
+const getRandomNumber = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+  const selectedMovieData = movieData.find(
+    (movie) => movie.movieName === selectedMovie
+  );
 
+  const initialSeatingArray = selectedMovieData.movieSeats;
   // Create state for the seating array
-  const [seatingArray, setSeatingArray] = useState(findDate.movieSeats);
+  const [seatingArray, setSeatingArray] = useState(initialSeatingArray);
 
+  // Create state to track selected seats
+  const [selectedSeats, setSelectedSeats] = useState([]);
+  const [ticketData, setTicketData] = useState([]);
   // Example: Set a specific seat as unavailable (row 3, seat 2)
   const markSeatAsUnavailable = (row, seat) => {
     // Create a copy of the seating array to avoid mutating state directly
@@ -20,18 +32,38 @@ const SeatReservationSystem = ({findDate}) => {
 
     // Update the state with the new seating array
     setSeatingArray(newSeatingArray);
-    
 
+    // Update selected seats
+    const seatIdentifier = `Row ${row + 1} Seat ${String.fromCharCode(65 + seat)}`;
+    setSelectedSeats((prevSelectedSeats) =>
+      prevSelectedSeats.includes(seatIdentifier)
+        ? prevSelectedSeats.filter((selectedSeat) => selectedSeat !== seatIdentifier)
+        : [...prevSelectedSeats, seatIdentifier]
+    );
   };
 
   const handleMovieUpdate = (event) => {
     event.preventDefault();
-    findDate.movieSeats = seatingArray;
-    console.log(findDate.movieSeats);
-    console.log(movieData);
-  };
-  //on submit do findDate.MovieSeats = seatingsArray
+    selectedMovieData.movieSeats = seatingArray;
 
+    // Generate a random ticket ID
+    const ticketId = getRandomNumber(1, 1000);
+
+    // Create a new ticket object with reserved seats
+    const newTicket = {
+      id: ticketId,
+      movieName: selectedMovieData.movieName,
+      movieDate: selectedMovieData.movieDate,
+      selectedSeats: selectedSeats,
+    };
+
+      // Update the ticketData state with the new ticket
+      // setTicketData((prevTicketData) => [...prevTicketData, newTicket]);
+      setTicketData(newTicket);
+      console.log(ticketData);
+      // Clear the selected seats
+      setSelectedSeats([]);
+  };
 
   // Render your component with the seatingArray state
   return (
@@ -45,24 +77,28 @@ const SeatReservationSystem = ({findDate}) => {
                 <td
                   key={seatIndex}
                   style={{
-                    padding: '8px',
-                    border: '1px solid #ddd',
-                    background: isSeatAvailable ? 'green' : 'red',
+                    padding: "8px",
+                    border: "1px solid #ddd",
+                    background: isSeatAvailable ? "green" : "red",
                   }}
                   onClick={() => markSeatAsUnavailable(rowIndex, seatIndex)}
                 >
-                   {`Row ${rowIndex + 1} Seat ${String.fromCharCode(65 + seatIndex)}`}
+                  {`Row ${rowIndex + 1} Seat ${String.fromCharCode(
+                    65 + seatIndex
+                  )}`}
                 </td>
               ))}
             </tr>
           ))}
         </tbody>
       </table>
-      <button onClick={handleMovieUpdate}>
-        Submit</button>
+      <button onClick={handleMovieUpdate}>Submit</button>
 
+      <div>
+        <h1>Ticket Info:</h1>
+        <p>Selected Seats: {selectedSeats.join(", ")}</p>
+      </div>
     </div>
-    
   );
 };
 
