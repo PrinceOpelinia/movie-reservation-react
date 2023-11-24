@@ -1,47 +1,50 @@
 import React, { useState } from "react";
 import MovieChoice from "./MovieChoice";
+import { Button, Calendar } from "antd"; // Combine imports for better readability
+import dayjs from 'dayjs';
+import ticketData from "./ticketData";
+import movieData from "./movieData";
+
 const ReserveMovie = () => {
-  const [selectedDate, setSelectedDate] = useState("");
   const [startMovieChoice, setStartMovieChoice] = useState(false);
+  const [selectedDate, setselectedDate] = useState(() => dayjs()); // Initialize with the current date
 
-  const handleDateChange = (event) => {
-    setSelectedDate(event.target.value);
-  };
-
-  const handleStartMovieChoice = () => {
-    // Do something with the selectedDate, e.g., pass it to a parent component or perform further processing
-    setStartMovieChoice(true);
- 
-  };
-
-  const handleGoToReserveMovie = () => {
-    // Do something with the selectedDate, e.g., pass it to a parent component or perform further processing
+  const cancelReservation = () => {
+    setselectedDate(dayjs());
     setStartMovieChoice(false);
+    
   };
 
+  const check = () => {
+    console.log(movieData); // Log the selectedDate instead of movieData
+    console.log(ticketData);
+  };
+
+  const onSelect = (newselectedDate) => {
+    setselectedDate(newselectedDate.format('YYYY-MM-DD'));
+    setStartMovieChoice(true);
+  };
+
+  const onPanelChange = (newselectedDate) => {
+    setselectedDate(newselectedDate);
+  };
+
+  const disabledDate = (current) => {
+    // Disable if the date is before today
+    return current && current < dayjs().startOf('day');
+  };
 
   return (
     <div>
-      
       {!startMovieChoice && (
-        <form>
-          <label>
-            Select Date:
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={handleDateChange}
-            />
-          </label>
-          <button type="submit" onClick={handleStartMovieChoice}>
-            Submit
-          </button>
-        </form>
+        <div>
+          <Calendar value={selectedDate} onSelect={onSelect} onPanelChange={onPanelChange} fullscreen={false} disabledDate={disabledDate}/>
+        </div>
       )}
-  <button className= "go-back-btn" type="submit" onClick={handleGoToReserveMovie}>
-    Go Back
-  </button>
-      {startMovieChoice && <MovieChoice selectedDate={selectedDate} />}
+      
+      {startMovieChoice && <div><MovieChoice selectedDate={selectedDate}/> <Button danger onClick={cancelReservation}>Cancel Reservation</Button> </div>}
+      <Button onClick={check}>Check console</Button>
+      
     </div>
   );
 };

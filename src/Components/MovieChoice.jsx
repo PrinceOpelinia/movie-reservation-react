@@ -1,58 +1,70 @@
-import { useState } from "react";
-import movieData from "./movieData";
+import React, { useState } from "react";
+import { Button, Space, Table, Typography } from "antd";
 import SeatReservationSystem from "./SeatReservationSystem";
+import movieData from "./movieData";
+
+const { Text } = Typography;
 
 const MovieChoice = ({ selectedDate }) => {
   const [movieClicked, setMovieClicked] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
+
   const moviesWithSameDate = movieData.filter(
-    (movieData) => movieData.movieDate === selectedDate
+    (movie) => movie.movieDate === selectedDate
   );
 
-  // Now, moviesWithSameDate is an array containing all movies with the selectedDate.
-  // You can use this array as needed in the rest of your component logic.
+  const handleReserveClick = (record) => {
+    setSelectedMovie(record);
+    setMovieClicked(true);
+  };
 
-    const handleClick = (movieName) => {
-      setMovieClicked(true)
-      setSelectedMovie(movieName);
-    }
+  const columns = [
+    {
+      title: "Movie Name",
+      dataIndex: "movieName",
+      key: "movieName",
+    },
+    {
+      title: "Movie Date",
+      dataIndex: "movieDate",
+      key: "movieDate",
+    },
+    {
+      title: "Start",
+      dataIndex: "startTime",
+      key: "startTime",
+    },
+    {
+      title: "End",
+      dataIndex: "endTime",
+      key: "endTime",
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Space size="middle">
+          <Button onClick={() => handleReserveClick(record)}>
+            Reserve now
+          </Button>
+        </Space>
+      ),
+    },
+  ];
 
   return (
     <div>
-
-      {/* {findDate ? (
-        <div>
-          <p>
-            Found Movie: {findDate.title} {findDate.movieName}
-          </p>
-          <SeatReservationSystem findDate={findDate} />
-        </div>
+      {!movieClicked && moviesWithSameDate.length > 0 ? (
+        <Table
+          columns={columns}
+          dataSource={moviesWithSameDate}
+          rowKey={(record) => record.movieId} // Replace with the actual unique identifier
+        />
       ) : (
-        <p>Movie not found</p>
-      )} */}
-
-      {movieClicked ? ( <div>
-          <p>
-            Found Movie: {selectedMovie.movieName}
-          </p>
-          <SeatReservationSystem selectedMovie={selectedMovie} />
-        </div>):(<div> 
-
-          <h2>Movies on {selectedDate}</h2>
-      <ul>
-        {moviesWithSameDate.map((movie) => (
-          <li key={movie.id} onClick={() => handleClick(movie.movieName)}>
-            <h3>{movie.movieName}</h3>
-            <p>Release Date: {movie.movieDate}</p>
-            {/* Add other movie details as needed */}
-          </li>
-        ))}
-      </ul>
-
-        </div>)}
-
-
-
+       <></>
+      )}
+  
+      {movieClicked && <SeatReservationSystem selectedMovie={selectedMovie} />}
     </div>
   );
 };

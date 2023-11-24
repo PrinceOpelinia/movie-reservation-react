@@ -1,39 +1,31 @@
 import React, { useState } from "react";
+import { Button } from "antd";
 import movieData from "./movieData";
-import TicketList from "./TicketList";
+import ticketData from "./ticketData";
 
 const SeatReservationSystem = ({ selectedMovie }) => {
-  // Function to generate a random number between min (inclusive) and max (inclusive)
-const getRandomNumber = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-  const selectedMovieData = movieData.find(
-    (movie) => movie.movieName === selectedMovie
-  );
+  const getRandomNumber = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
 
-  const initialSeatingArray = selectedMovieData.movieSeats;
-  // Create state for the seating array
+  const initialSeatingArray = selectedMovie.movieSeats;
   const [seatingArray, setSeatingArray] = useState(initialSeatingArray);
-
-  // Create state to track selected seats
   const [selectedSeats, setSelectedSeats] = useState([]);
-  const [ticketData, setTicketData] = useState([]);
-  // Example: Set a specific seat as unavailable (row 3, seat 2)
+  const [currentTicketData, setcurrentTicketData] = useState([]);
+  const [isSubmitClicked, setIsSubmitClicked] = useState(false);
+
   const markSeatAsUnavailable = (row, seat) => {
-    // Create a copy of the seating array to avoid mutating state directly
     const newSeatingArray = seatingArray.map((rowArray, rowIndex) => {
       if (rowIndex === row) {
-        return rowArray.map((isSeatAvailable, seatIndex) => {
-          return seatIndex === seat ? false : isSeatAvailable;
-        });
+        return rowArray.map((isSeatAvailable, seatIndex) =>
+          seatIndex === seat ? false : isSeatAvailable
+        );
       }
-      return rowArray.slice(); // Return a copy of rows that aren't being modified
+      return rowArray.slice();
     });
 
-    // Update the state with the new seating array
     setSeatingArray(newSeatingArray);
 
-    // Update selected seats
     const seatIdentifier = `Row ${row + 1} Seat ${String.fromCharCode(65 + seat)}`;
     setSelectedSeats((prevSelectedSeats) =>
       prevSelectedSeats.includes(seatIdentifier)
@@ -42,62 +34,64 @@ const getRandomNumber = (min, max) => {
     );
   };
 
-  const handleMovieUpdate = (event) => {
-    event.preventDefault();
-    selectedMovieData.movieSeats = seatingArray;
+  const handleMovieUpdate = () => {
+    selectedMovie.movieSeats = seatingArray;
 
-    // Generate a random ticket ID
     const ticketId = getRandomNumber(1, 1000);
 
-    // Create a new ticket object with reserved seats
     const newTicket = {
       id: ticketId,
-      movieName: selectedMovieData.movieName,
-      movieDate: selectedMovieData.movieDate,
+      movieName: selectedMovie.movieName,
+      movieDate: selectedMovie.movieDate,
       selectedSeats: selectedSeats,
     };
+    ticketData.push(newTicket);
 
-      // Update the ticketData state with the new ticket
-      // setTicketData((prevTicketData) => [...prevTicketData, newTicket]);
-      setTicketData(newTicket);
-      console.log(ticketData);
-      // Clear the selected seats
-      setSelectedSeats([]);
+    setcurrentTicketData(newTicket);
+    setIsSubmitClicked(true);
   };
 
-  // Render your component with the seatingArray state
   return (
     <div>
-      <h2>Seating Chart</h2>
-      <table>
-        <tbody>
-          {seatingArray.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {row.map((isSeatAvailable, seatIndex) => (
-                <td
-                  key={seatIndex}
-                  style={{
-                    padding: "8px",
-                    border: "1px solid #ddd",
-                    background: isSeatAvailable ? "green" : "red",
-                  }}
-                  onClick={() => markSeatAsUnavailable(rowIndex, seatIndex)}
-                >
-                  {`Row ${rowIndex + 1} Seat ${String.fromCharCode(
-                    65 + seatIndex
-                  )}`}
-                </td>
+      {!isSubmitClicked && (
+        <div>
+          <h2>Seating Chart: {selectedMovie.movieName}</h2>
+          <table style={{ borderCollapse: "collapse", margin: "10px" }}>
+            <tbody>
+              {seatingArray.map((row, rowIndex) => (
+                <tr key={rowIndex}>
+                  {row.map((seat, seatIndex) => (
+                    <td
+                      key={seatIndex}
+                      style={{
+                        padding: "8px",
+                        border: "1px solid #ddd",
+                        background: seat ? "green" : "red",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => markSeatAsUnavailable(rowIndex, seatIndex)}
+                    >
+                      {`Row ${rowIndex + 1} Seat ${String.fromCharCode(65 + seatIndex)}`}
+                    </td>
+                  ))}
+                </tr>
               ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <button onClick={handleMovieUpdate}>Submit</button>
+            </tbody>
+          </table>
+          <Button type="primary" onClick={handleMovieUpdate}>
+            Submit
+          </Button>
+        </div>
+      )}
 
-      <div>
-        <h1>Ticket Info:</h1>
-        <p>Selected Seats: {selectedSeats.join(", ")}</p>
-      </div>
+      {isSubmitClicked && (
+        <div>
+          <h1>Ticket Info:</h1>
+          <h1>{currentTicketData.movieName}</h1>
+          <h1>Ticket # {currentTicketData.id}</h1>
+          <p>Selected Seats: {currentTicketData.selectedSeats.join(", ")}</p>
+        </div>
+      )}
     </div>
   );
 };
