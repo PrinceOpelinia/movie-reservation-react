@@ -26,8 +26,10 @@ const CancelReservation = () => {
       // Update movieSeats based on the canceled reservation
       setMovieDataState((prevMovieData) => {
         const newMovieData = prevMovieData.map((movie) => {
-          if (movie.movieName === ticketData[ticketIndex].movieName && movie.movieDate === ticketData[ticketIndex].movieDate) {
-            const updatedSeats = movie.movieSeats.map((row, rowIndex) => {
+          if (movie.movieName === ticketData[ticketIndex].movieName && movie.movieDate === ticketData[ticketIndex].movieDate) 
+          {
+            const updatedSeats = movie.movieSeats.map((row, rowIndex) => 
+            {
               return row.map((seat, seatIndex) => {
                 const isSeatSelected = ticketData[ticketIndex].selectedSeats.some(
                   (selectedSeat) =>
@@ -40,12 +42,7 @@ const CancelReservation = () => {
   
             // Modify the existing movie object directly
             movie.movieSeats = updatedSeats;
-  
-            return movie;
-          } else {
-            return movie;
-          }
-        });
+        }});
   
         // Delete the ticket from ticketData
         const updatedTicketData = [...ticketData];
@@ -82,10 +79,12 @@ const CancelReservation = () => {
 
   return (
     <>
+    <div>
+    <h1>Input seat to cancel: </h1>
       <Input value={inputValue} onChange={handleInputChange} />
 
       <Button type="primary" onClick={showModal}>
-        Open Modal
+        Cancel Reservation
       </Button>
       <Modal
         title="Basic Modal"
@@ -93,17 +92,18 @@ const CancelReservation = () => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <p>
+       
           {isTicketIdExists(inputValue) && (
             <h3>Do you really want to cancel ticket # {inputValue}</h3>
           )}
-        </p>
-        <p>
+     
+     
           {!isTicketIdExists(inputValue) && (
             <h3>Ticket # {inputValue} does not exist</h3>
           )}
-        </p>
+      
       </Modal>
+      </div>
     </>
   );
 };

@@ -3,8 +3,6 @@ import { Button, Space, Table, Typography } from "antd";
 import SeatReservationSystem from "./SeatReservationSystem";
 import movieData from "./movieData";
 
-const { Text } = Typography;
-
 const MovieChoice = ({ selectedDate }) => {
   const [movieClicked, setMovieClicked] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -15,7 +13,7 @@ const MovieChoice = ({ selectedDate }) => {
 
   const handleReserveClick = (record) => {
     setSelectedMovie(record);
-    setMovieClicked(true);
+    setMovieClicked(true);  
   };
 
   const columns = [
@@ -58,7 +56,7 @@ const MovieChoice = ({ selectedDate }) => {
         <Table
           columns={columns}
           dataSource={moviesWithSameDate}
-          rowKey={(record) => record.movieId} // Replace with the actual unique identifier
+          rowKey={(record) => record.movieId} // Make sure movieId is unique
         />
       ) : (
        <></>
