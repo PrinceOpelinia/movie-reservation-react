@@ -8,7 +8,7 @@ import CancelReservation from "./Components/CancelReservation";
 function App() {
   const [startReserveMovie, setStartReserveMovie] = useState(false);
   const [startCancelReservation, setStartCancelReservation] = useState(false);
-  const [hideReserveButton, sethideReserveButton] = useState(false);
+  const [backToHome, setbackToHome] = useState(false);
   
 
   function handleStartReserveMovie() {
@@ -17,12 +17,18 @@ function App() {
 
   function handleStartCancelReservation() {
     setStartCancelReservation(true);
-    sethideReserveButton(true);
+  }
+
+  function handleBackToHome() {
+    setStartReserveMovie(false);
+    setStartCancelReservation(false);
   }
 
   return (
     <div>
       
+      <Button onClick={handleBackToHome}>Back To Home</Button>
+
       <Flex align="center" justify="space-evenly" wrap="wrap" gap="small" style={{ flexDirection: "row" }}>
         {startReserveMovie ? (
           <ReserveMovie />

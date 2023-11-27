@@ -13,26 +13,26 @@ const SeatReservationSystem = ({ selectedMovie }) => {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [currentTicketData, setcurrentTicketData] = useState([]);
   const [isSubmitClicked, setIsSubmitClicked] = useState(false);
+  const [selectedSeatArray, setselectedSeatArray] = useState([]);
 
   const markSeatAsUnavailable = (row, seat) => {
     const newSeatingArray = seatingArray.map((rowArray, rowIndex) => {
       if (rowIndex === row) {
-        return rowArray.map((isSeatAvailable, seatIndex) =>
-          seatIndex === seat ? false : isSeatAvailable
-        );
+        return rowArray.map((isSeatAvailable, seatIndex) => {
+          if (seatIndex === seat && isSeatAvailable) {
+            // Update selectedSeats with the clicked seat indexes
+            const updatedSelectedSeats = [...selectedSeats, { row: rowIndex, seat: seatIndex }];
+            setSelectedSeats(updatedSelectedSeats);
+          }
+          return seatIndex === seat ? false : isSeatAvailable;
+        });
       }
       return rowArray.slice();
     });
-
+  
     setSeatingArray(newSeatingArray);
-
-    const seatIdentifier = `Row ${row + 1} Seat ${String.fromCharCode(65 + seat)}`;
-    setSelectedSeats((prevSelectedSeats) =>
-      prevSelectedSeats.includes(seatIdentifier)
-        ? prevSelectedSeats.filter((selectedSeat) => selectedSeat !== seatIdentifier)
-        : [...prevSelectedSeats, seatIdentifier]
-    );
   };
+  
 
   const handleMovieUpdate = () => {
     selectedMovie.movieSeats = seatingArray;
@@ -71,7 +71,9 @@ const SeatReservationSystem = ({ selectedMovie }) => {
                       }}
                       onClick={() => markSeatAsUnavailable(rowIndex, seatIndex)}
                     >
-                      {`Row ${rowIndex + 1} Seat ${String.fromCharCode(65 + seatIndex)}`}
+                      {`Row ${rowIndex + 1} Seat ${String.fromCharCode(
+                        65 + seatIndex
+                      )}`}
                     </td>
                   ))}
                 </tr>
@@ -89,7 +91,17 @@ const SeatReservationSystem = ({ selectedMovie }) => {
           <h1>Ticket Info:</h1>
           <h1>{currentTicketData.movieName}</h1>
           <h1>Ticket # {currentTicketData.id}</h1>
-          <p>Selected Seats: {currentTicketData.selectedSeats.join(", ")}</p>
+          <p>
+            Selected Seats:{" "}
+            {currentTicketData.selectedSeats.map((seat, index) => (
+              <span key={index}>
+                {`Row ${seat.row + 1} Seat ${String.fromCharCode(
+                  65 + seat.seat
+                )}`}
+                {index < currentTicketData.selectedSeats.length - 1 ? ", " : ""}
+              </span>
+            ))}
+          </p>
         </div>
       )}
     </div>

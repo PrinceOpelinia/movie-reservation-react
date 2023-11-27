@@ -3,7 +3,7 @@
 const movieData = [
   {
     movieName: "Inception",
-    movieDate: "2023-11-25",
+    movieDate: "2023-11-30",
     startTime: "15:00",
     endTime: "17:30",
     movieSeats:  [
@@ -19,7 +19,7 @@ const movieData = [
   },
   {
     movieName: "The Matrix",
-    movieDate: "2023-11-25",
+    movieDate: "2023-11-30",
     startTime: "18:00",
     endTime: "20:30",
     movieSeats:  [
@@ -35,7 +35,7 @@ const movieData = [
   },
   {
     movieName: "The Dark Knight",
-    movieDate: "2023-11-25",
+    movieDate: "2023-11-30",
     startTime: "21:00",
     endTime: "23:30",
     movieSeats:  [
@@ -51,7 +51,7 @@ const movieData = [
   },
   {
     movieName: "Interstellar",
-    movieDate: "2023-11-25",
+    movieDate: "2023-11-30",
     startTime: "14:30",
     endTime: "17:00",
     movieSeats:  [
@@ -67,7 +67,7 @@ const movieData = [
   },
   {
     movieName: "Avatar",
-    movieDate: "2023-11-25",
+    movieDate: "2023-11-30",
     startTime: "19:00",
     endTime: "21:30",
     movieSeats:  [
@@ -83,7 +83,7 @@ const movieData = [
   },
   {
     movieName: "Titanic",
-    movieDate: "2023-11-25",
+    movieDate: "2023-11-30",
     startTime: "20:00",
     endTime: "22:30",
     movieSeats:  [
@@ -99,7 +99,7 @@ const movieData = [
   },
   {
     movieName: "Jurassic Park",
-    movieDate: "2023-11-25",
+    movieDate: "2023-11-30",
     startTime: "17:30",
     endTime: "20:00",
     movieSeats:  [
